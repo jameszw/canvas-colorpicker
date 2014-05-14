@@ -28,7 +28,7 @@
         this.colorSquare = new ColorSquare(this.ctx, pos, pos, side, side);
 
         this.attachEventListeners();
-    };
+    }
 
     ColorPicker.COLOR_PICKED = "colorPicked";
 
@@ -52,7 +52,7 @@
         }, false);
 
         this.canvas.addEventListener('mousemove', function(e) {
-            if (isDragging == true) {
+            if (isDragging === true) {
                 // Only allow interaction when the mouse is being dragged.
                 self.onInteraction(e);
             }
@@ -106,10 +106,10 @@
     };
 
     ColorPicker.prototype.getCanvasPositionForEvent = function(e) {
-        var x = e.clientX - this.canvas.offsetLeft
-                    + document.body.scrollLeft + document.documentElement.scrollLeft;
-        var y = e.clientY - this.canvas.offsetTop
-                    + document.body.scrollTop + document.documentElement.scrollTop;
+        var x = (e.clientX - this.canvas.offsetLeft + 
+                    document.body.scrollLeft + document.documentElement.scrollLeft);
+        var y = (e.clientY - this.canvas.offsetTop + 
+                    document.body.scrollTop + document.documentElement.scrollTop);
         return {
             top: y,
             left: x
@@ -142,6 +142,7 @@
         // x-, y-coords denote absolute top-left position within the canvas.
         x = (x == null) ? 0 : x;
         y = (y == null) ? 0 : y;
+
         this.width = w;
         this.height = h;
 
@@ -219,7 +220,7 @@
         };
 
         this.setPosition(x, y);
-    };
+    }
 
     /*
      * HuePicker
@@ -246,7 +247,7 @@
 
             return r2 >= this.innerR2 && r2 <= this.outerR2;
         };
-    };
+    }
 
     HuePicker.HUE_PICKED = "huePicked";
 
@@ -329,7 +330,7 @@
             this.x + this.width / 2, this.y + this.height / 2);
 
         this.updateMarker = HuePicker.prototype.updateMarker;
-    };
+    }
 
     ColorSquare.SQUARE_PICKED = "squarePicked";
 
@@ -343,6 +344,7 @@
         }
     };
     ColorSquare.prototype.rgbAtPoint = function(x, y) {
+
         var sat = ((x - this.x) / this.width) * 100;
         var light = 100 - ((y - this.y) / this.height) * 100;
 
@@ -400,7 +402,7 @@
         Sprite.apply(this, args);
 
         this.lineWidth = 1;
-    };
+    }
 
     Marker.prototype.draw = function() {
         // The x-y coords were set to the center of the marker.
@@ -431,7 +433,9 @@
      * Helpers
      */
     function rgbToHsl(r, g, b){
-        r /= 255, g /= 255, b /= 255;
+        r /= 255;
+        g /= 255;
+        b /= 255;
 
         var max = Math.max(r, g, b), 
             min = Math.min(r, g, b),
@@ -486,7 +490,7 @@
             return hp;
         }
 
-        if (s == 0) {
+        if (s === 0) {
             r = g = b = l; 
         } else {
             q = l < 0.5 ? l * (1 + s) : l + s - l * s;
