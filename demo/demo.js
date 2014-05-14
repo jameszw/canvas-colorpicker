@@ -42,7 +42,7 @@
     Demo.prototype.attachEventListeners = function() {
         var self = this;
 
-        this.colorPicker.canvas.addEventListener(ColorPicker.COLOR_PICKED, function(e) {
+        this.colorPicker.canvas.addEventListener(CanvasColorPicker.COLOR_PICKED, function(e) {
             var detail = e.detail,
                 rgb = detail.rgb,
                 hsl = detail.hsl,

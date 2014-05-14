@@ -1,9 +1,9 @@
 (function() {
 
     /*
-     * ColorPicker
+     * CanvasColorPicker
      */
-    function ColorPicker(config) {
+    function CanvasColorPicker(config) {
         // TODO: more flexible creation of canvas based on id
         // TODO set canvas width/height
         this.config = config;
@@ -30,14 +30,14 @@
         this.attachEventListeners();
     }
 
-    ColorPicker.COLOR_PICKED = "colorPicked";
+    CanvasColorPicker.COLOR_PICKED = "colorPicked";
 
-    ColorPicker.prototype.draw = function() {
+    CanvasColorPicker.prototype.draw = function() {
         this.huePicker.draw();
         this.colorSquare.draw();
     };
 
-    ColorPicker.prototype.attachEventListeners = function() {
+    CanvasColorPicker.prototype.attachEventListeners = function() {
         // With `self`, we don't need to worry about browser support for
         // Function.prototype.bind.
         var self = this;
@@ -72,7 +72,7 @@
 
         this.canvas.addEventListener(ColorSquare.SQUARE_PICKED, function(e) {
             // Simply relay this event under a new event name for outside use.
-            var ev = new CustomEvent(ColorPicker.COLOR_PICKED, {
+            var ev = new CustomEvent(CanvasColorPicker.COLOR_PICKED, {
                 detail: e.detail
             });
 
@@ -80,32 +80,32 @@
         }, false);
     };
 
-    ColorPicker.prototype.getColor = function() {
+    CanvasColorPicker.prototype.getColor = function() {
         var m = this.colorSquare.marker;
         var color = this.getCanvasColorAtPoint(m.x, m.y);
 
         return color;
     };
 
-    ColorPicker.prototype.getRGB = function() {
+    CanvasColorPicker.prototype.getRGB = function() {
         return this.getColor().rgb;
     };
 
-    ColorPicker.prototype.getHSL = function() {
+    CanvasColorPicker.prototype.getHSL = function() {
         return this.getColor().hsl;
     };
 
-    ColorPicker.prototype.setRGB = function(r, g, b) {
+    CanvasColorPicker.prototype.setRGB = function(r, g, b) {
         this.huePicker.setRGB(r, g, b);
         this.colorSquare.setRGB(r, g, b);
     };
 
-    ColorPicker.prototype.setHSL = function(h, s, l) {
+    CanvasColorPicker.prototype.setHSL = function(h, s, l) {
         this.huePicker.setHSL(h, s, l);
         this.colorSquare.setHSL(h, s, l);
     };
 
-    ColorPicker.prototype.getCanvasPositionForEvent = function(e) {
+    CanvasColorPicker.prototype.getCanvasPositionForEvent = function(e) {
         var x = (e.clientX - this.canvas.offsetLeft + 
                     document.body.scrollLeft + document.documentElement.scrollLeft);
         var y = (e.clientY - this.canvas.offsetTop + 
@@ -116,7 +116,7 @@
         };
     };
 
-    ColorPicker.prototype.onInteraction = function(e) {
+    CanvasColorPicker.prototype.onInteraction = function(e) {
         var pos = this.getCanvasPositionForEvent(e),
             x = pos.left,
             y = pos.top;
@@ -130,7 +130,7 @@
         }
     };
 
-    window.ColorPicker = ColorPicker;
+    window.CanvasColorPicker = CanvasColorPicker;
 
 
     /*
