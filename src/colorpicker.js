@@ -80,6 +80,21 @@
         }, false);
     };
 
+    ColorPicker.prototype.getColor = function() {
+        var m = this.colorSquare.marker;
+        var color = this.getCanvasColorAtPoint(m.x, m.y);
+
+        return color;
+    };
+
+    ColorPicker.prototype.getRGB = function() {
+        return this.getColor().rgb;
+    };
+
+    ColorPicker.prototype.getHSL = function() {
+        return this.getColor().hsl;
+    };
+
     ColorPicker.prototype.setRGB = function(r, g, b) {
         this.huePicker.setRGB(r, g, b);
         this.colorSquare.setRGB(r, g, b);

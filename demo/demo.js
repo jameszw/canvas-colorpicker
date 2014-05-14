@@ -53,7 +53,6 @@
             self.hexDisplay.setRGB(r, g, b);
             self.hslPanel.setColor({h: h, s: s, l: l});
             self.rgbPanel.setColor({r: r, g: g, b: b});
-
         }, false);
     };
 
