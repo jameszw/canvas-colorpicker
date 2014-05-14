@@ -208,6 +208,8 @@
 
     /*
      * HuePicker
+     *   A hue value ranges from 0 to 360 degrees. The picker is displayed as a
+     *   disc-like band representing this value range.
      */
     function HuePicker() {
         Sprite.apply(this, arguments);
@@ -251,7 +253,7 @@
         // Redraw area of marker's old position.
         // The marker's x-y coords denote the center, not the top-left position.
         // We need to calculate it then.
-        // Also, add a bit of extra "padding" pixels to include the bits from arc's
+        // Also, add a bit of extra "padding" pixels to include the bits from arc()'s
         // anti-aliasing.
         var padding = 4,
             markerPos = this.marker.getTopLeft(),
@@ -302,6 +304,7 @@
 
     /*
      * ColorSquare
+     *   Displays the saturation and lightness range of colors for a given hue.
      */
     function ColorSquare() {
         Sprite.apply(this, arguments);
