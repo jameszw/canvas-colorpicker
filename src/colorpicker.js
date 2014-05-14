@@ -1,94 +1,6 @@
 (function() {
 
     /*
-     * Sprite
-     */
-    function Sprite(ctx, x, y, w, h) {
-        this.ctx = ctx;
-
-        // x-, y-coords denote absolute top-left position within the canvas.
-        x = (x == null) ? 0 : x;
-        y = (y == null) ? 0 : y;
-        this.width = w;
-        this.height = h;
-
-        // Simple emulation of OOP through direct assignment of properties.
-        // Full-fledged OOP would require deep copying/cloning of class
-        // prototype chains, but for this project, our needs are simple enough
-        // where that may be overkill.
-        this.containsPoint = function(x, y) {
-            return (x >= this.x && x < (this.x + this.width)) &&
-                   (y >= this.y && y < (this.y + this.height));
-        };
-
-        this.getCanvasColorAtPoint = function(x, y) {
-            var imgData = this.ctx.getImageData(x, y, 1, 1),
-                rgbData = imgData.data,
-                rgb = [rgbData[0], rgbData[1], rgbData[2]],
-                hsl = rgbToHsl.apply(this, rgb);
-
-            return {
-                rgb: rgb,
-                hsl: hsl
-            };
-        };
-
-        this.drawArea = function(startX, startY, width, height) {
-            var self = this;
-
-            var sx = isNaN(startX) ? 0 : startX,
-                sy = isNaN(startY) ? 0 : startY,
-                w  = isNaN(width)  ? this.width : width,
-                h  = isNaN(height) ? this.height : height;
-
-            // Defining variables here to make the effect of hoisting clearer. 
-            var imgData = this.ctx.getImageData(sx, sy, w, h);
-            var rgbData = imgData.data;
-
-            var x, y, rgb;
-            
-            // `i` is the index counter for rgbData
-            var i;
-
-            for (x = sx; x < (sx + w); x++) {
-                for (y = sy; y < (sy + h); y++) {
-                    // Convert x-y coords to index number
-                    i = ((y - sy)* w + (x - sx)) * 4;
-
-                    // Don't think this should happen...
-                    if (i < 0 || i > (rgbData.length - 4)) {
-                        continue;
-                    }
-
-                    if (this.containsPoint(x, y) !== true) {
-                        // Make this pixel transparent
-                        rgbData[i + 3] = 0; 
-                    } else {
-                        rgb = this.rgbAtPoint(x, y);
-
-                        rgbData[i]   = rgb[0];
-                        rgbData[i+1] = rgb[1];
-                        rgbData[i+2] = rgb[2];
-                        rgbData[i+3] = 255;
-                    }
-                }
-            }
-
-            this.ctx.putImageData(imgData, sx, sy);
-        };
-
-        this.setPosition = function(x, y) {
-            // Weird things happen at non-integer coords
-            this.x = Math.round(x);
-            this.y = Math.round(y);
-            this.centerX = this.x + Math.round(this.width / 2);
-            this.centerY = this.y + Math.round(this.height / 2);
-        };
-
-        this.setPosition(x, y);
-    };
-
-    /*
      * ColorPicker
      */
     function ColorPicker(config) {
@@ -205,6 +117,94 @@
 
     window.ColorPicker = ColorPicker;
 
+
+    /*
+     * Sprite
+     */
+    function Sprite(ctx, x, y, w, h) {
+        this.ctx = ctx;
+
+        // x-, y-coords denote absolute top-left position within the canvas.
+        x = (x == null) ? 0 : x;
+        y = (y == null) ? 0 : y;
+        this.width = w;
+        this.height = h;
+
+        // Simple emulation of OOP through direct assignment of properties.
+        // Full-fledged OOP would require deep copying/cloning of class
+        // prototype chains, but for this project, our needs are simple enough
+        // where that may be overkill.
+        this.containsPoint = function(x, y) {
+            return (x >= this.x && x < (this.x + this.width)) &&
+                   (y >= this.y && y < (this.y + this.height));
+        };
+
+        this.getCanvasColorAtPoint = function(x, y) {
+            var imgData = this.ctx.getImageData(x, y, 1, 1),
+                rgbData = imgData.data,
+                rgb = [rgbData[0], rgbData[1], rgbData[2]],
+                hsl = rgbToHsl.apply(this, rgb);
+
+            return {
+                rgb: rgb,
+                hsl: hsl
+            };
+        };
+
+        this.drawArea = function(startX, startY, width, height) {
+            var self = this;
+
+            var sx = isNaN(startX) ? 0 : startX,
+                sy = isNaN(startY) ? 0 : startY,
+                w  = isNaN(width)  ? this.width : width,
+                h  = isNaN(height) ? this.height : height;
+
+            // Defining variables here to make the effect of hoisting clearer. 
+            var imgData = this.ctx.getImageData(sx, sy, w, h);
+            var rgbData = imgData.data;
+
+            var x, y, rgb;
+            
+            // `i` is the index counter for rgbData
+            var i;
+
+            for (x = sx; x < (sx + w); x++) {
+                for (y = sy; y < (sy + h); y++) {
+                    // Convert x-y coords to index number
+                    i = ((y - sy)* w + (x - sx)) * 4;
+
+                    // Don't think this should happen...
+                    if (i < 0 || i > (rgbData.length - 4)) {
+                        continue;
+                    }
+
+                    if (this.containsPoint(x, y) !== true) {
+                        // Make this pixel transparent
+                        rgbData[i + 3] = 0; 
+                    } else {
+                        rgb = this.rgbAtPoint(x, y);
+
+                        rgbData[i]   = rgb[0];
+                        rgbData[i+1] = rgb[1];
+                        rgbData[i+2] = rgb[2];
+                        rgbData[i+3] = 255;
+                    }
+                }
+            }
+
+            this.ctx.putImageData(imgData, sx, sy);
+        };
+
+        this.setPosition = function(x, y) {
+            // Weird things happen at non-integer coords
+            this.x = Math.round(x);
+            this.y = Math.round(y);
+            this.centerX = this.x + Math.round(this.width / 2);
+            this.centerY = this.y + Math.round(this.height / 2);
+        };
+
+        this.setPosition(x, y);
+    };
 
     /*
      * HuePicker
