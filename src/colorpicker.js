@@ -232,8 +232,7 @@
         this.outerRadius = this.width / 2;
         this.innerRadius = this.outerRadius - this.width / 10;
 
-        // A small optimization where we can just calculate these values here
-        // as opposed to every iteration in the loop.
+        // Small optimization to these values for later use
         this.outerR2 = Math.pow(this.outerRadius, 2);
         this.innerR2 = Math.pow(this.innerRadius, 2);
 
@@ -392,7 +391,7 @@
     function Marker() {
         var args = Array.prototype.slice.call(arguments);
 
-        // Set default width, height
+        // TODO: Configurable width, height, lineWidth
         var side = 10;
 
         args[3] = args[3] == null ? side : args[3];
