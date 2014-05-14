@@ -1,0 +1,83 @@
+body {
+    padding: 20px;
+    background: #444;
+    font-family: "Helvetica Neue", "Arial", sans-serif;
+    font-size: 14px;
+}
+
+#colorpicker {
+    float: left;
+}
+
+#demo {
+    float: left;
+    margin-right: 40px;
+    font-family: "Courier New", monospace;
+}
+
+#demo input[type=text] {
+    font-family: "Courier New", monospace;
+    font-weight: bold;
+    font-size: 1em;
+    outline: none;
+    border: 0;
+    padding: 3px;
+    text-align: center;
+}
+
+#demo .color {
+    height: 40px;
+    background: #fff;
+    border: 1px solid #000;
+}
+
+#demo .hex {
+    margin: 10px 0;
+    padding: 7px 10px;
+    background: #ddd;
+}
+
+#demo .hex input[type=text] {
+    display: block;
+    background: #fff;
+    width: 80px;
+}
+
+#demo ul {
+    margin: 0;
+    padding: 10px 15px;
+    background: #ddd;
+}
+
+#demo li {
+    margin: 0;
+    padding: 0;
+    margin-bottom: 5px;
+    list-style-type: none;
+}
+
+#demo label {
+    display: inline-block;
+    width: 20px;
+    margin-right: 5px;
+    color: #111;
+}
+
+#demo li label:after {
+    content: ":";
+}
+
+#demo input[type=text] {
+    display: inline-block;
+    width: 40px;
+}
+
+#demo .hsl {
+    margin-top: 10px;
+
+}
+
+#demo .rgb {
+    border-top: 1px solid #ccc;
+    padding-top: 11px;
+}

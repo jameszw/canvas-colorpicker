@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<link rel="stylesheet" type="text/css" href="demo.css" />
+
+</head>
+
+<body>
+
+  <div id="demo">
+    <div class="color">
+    </div>
+
+    <div class="hex">
+      <input type="text" maxlength="7" />
+    </div>
+
+    <ul class="hsl">
+      <li class="h">
+        <label>H</label> <input type="text" maxlength="3" />
+      </li>
+      <li class="s">
+        <label>S</label> <input type="text" maxlength="3" />
+      </li>
+      <li class="l">
+        <label>L</label> <input type="text" maxlength="3" />
+      </li>
+    </ul>
+
+    <ul class="rgb">
+      <li class="r">
+        <label>R</label> <input type="text" maxlength="3" />
+      </li>
+      <li class="g">
+        <label>G</label> <input type="text" maxlength="3" />
+      </li>
+      <li class="b">
+        <label>B</label> <input type="text" maxlength="3" />
+      </li>
+    </ul>
+
+  </div>
+
+  <div id="colorpicker"></div>
+
+  <script src="../src/colorpicker.js"></script>
+  <script src="demo.js"></script>
+  <script>
+  (function() {
+
+    var colorPicker = new ColorPicker({
+      id: "colorpicker",
+      // size: 200
+      size: 330
+      // size: 512
+    });
+
+    var demo = new Demo({
+      id: "demo",
+      colorPicker: colorPicker
+    });
+
+    colorPicker.draw();
+  })();
+  </script>
+
+</body>
+
+</html>
