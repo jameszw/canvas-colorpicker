@@ -1,14 +1,22 @@
 (function() {
 
+    var defaults = {
+        size: 300
+    };
+
     /*
      * CanvasColorPicker
      */
     function CanvasColorPicker(config) {
         // TODO: more flexible creation of canvas based on id
         // TODO set canvas width/height
-        this.config = config;
+        this.config = extend(defaults, config);
 
         this.el = document.getElementById(this.config.id);
+        if (this.el == null) {
+            this.el = document.createElement("div");
+            document.body.appendChild(this.el);
+        }
 
         this.canvas = document.createElement("canvas");
         this.canvas.setAttribute("width", this.config.size);
@@ -432,6 +440,21 @@
     /*
      * Helpers
      */
+
+    // Basic implementation of extend() for simple objects
+    function extend() {
+        var obj = {};
+        for (var i = 0; i < arguments.length; i++) {
+            // Create new object reference
+            var copy = JSON.parse(JSON.stringify(arguments[i]));
+
+            for (var key in copy) {
+                obj[key] = copy[key];
+            }
+        }
+        return obj;
+    }
+
     function rgbToHsl(r, g, b){
         r /= 255;
         g /= 255;
