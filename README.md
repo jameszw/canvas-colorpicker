@@ -51,8 +51,8 @@ Sets the color picker's color to the specified HSLvalue. A
 Returns an object containing two object properties `rgb` and `hsl`.
 
     var color = canvasColorPicker.getColor();
-    color.rgb;  // an array of RGB values, i.e. [144, 100, 80]
-    color.hsl;  // an array of HSL values, i.e. [300, 80, 50]
+    color.rgb;  // an array of RGB values, e.g. [144, 100, 80]
+    color.hsl;  // an array of HSL values, e.g. [300, 80, 50]
 
 `getRGB()`
 
