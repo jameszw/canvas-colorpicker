@@ -1,7 +1,7 @@
 Canvas Color Picker
 ===================
 
-A simple JavaScript color picker using `canvas`.
+A simple JavaScript color picker using `<canvas>`.
 
 ## Usage
 
@@ -45,6 +45,7 @@ Sets the color picker's color to the specified RGB value. A
 Sets the color picker's color to the specified HSLvalue. A
 `CanvasColorPicker.COLOR_PICKED` event is dispatched after the color is set
 (see below).
+
 `getColor()`
 
 Returns an object containing two object properties `rgb` and `hsl`.
@@ -65,8 +66,8 @@ Shorthand for `getColor().hsl`.
 
 `CanvasColorPicker.COLOR_PICKED`
 
-This event is dispatched whenever a color is picked or set in the picker. To
-listen for this event, add an event listener to the color's `canvas` property.
+This event is dispatched whenever a color is chosen or set in the picker. To
+listen for this event, add an event listener to the color picker's `canvas` property.
 
 The picked color is returned with the event in both RGB and HSL formats. These
 values can be found under the event's `detail` property, with the property names 
