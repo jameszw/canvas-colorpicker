@@ -188,8 +188,8 @@
         this.ctx = ctx;
 
         // x-, y-coords denote absolute top-left position within the canvas.
-        x = (x == null) ? 0 : x;
-        y = (y == null) ? 0 : y;
+        x = (x == null || isNaN(x)) ? 0 : Math.round(x);
+        y = (y == null || isNaN(x)) ? 0 : Math.round(y);
 
         this.width = w;
         this.height = h;
