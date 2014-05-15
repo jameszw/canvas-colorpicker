@@ -12,30 +12,15 @@
     function CanvasColorPicker(config) {
         this.config = extend(defaults, config);
 
-        this.el = document.getElementById(this.config.id);
-        if (this.el == null) {
-            this.el = document.createElement("div");
-            document.body.appendChild(this.el);
-        }
-
-        this.canvas = document.createElement("canvas");
-        this.canvas.setAttribute("width", this.config.size);
-        this.canvas.setAttribute("height", this.config.size);
-        this.el.appendChild(this.canvas);
-
-        this.ctx = this.canvas.getContext("2d");
+        this._initContainer();
+        this._initCanvas();
 
         Sprite.apply(this, [this.config, this.ctx, 0, 0, this.canvas.width, this.canvas.height]);
 
-        this.huePicker = new HuePicker(this.config, this.ctx, 0, 0, 
-                                       this.canvas.width, this.canvas.height);
+        this._initHuePicker();
+        this._initColorSquare();
 
-        var side = this.canvas.width / 2,
-            pos = this.centerX - side / 2;
-
-        this.colorSquare = new ColorSquare(this.config, this.ctx, pos, pos, side, side);
-
-        this.attachEventListeners();
+        this._attachEventListeners();
     }
 
     CanvasColorPicker.COLOR_PICKED = "colorPicked";
@@ -43,49 +28,6 @@
     CanvasColorPicker.prototype.draw = function() {
         this.huePicker.draw();
         this.colorSquare.draw();
-    };
-
-    CanvasColorPicker.prototype.attachEventListeners = function() {
-        // With `self`, we don't need to worry about browser support for
-        // Function.prototype.bind.
-        var self = this;
-        var isDragging = false;
-
-        // Only 2 objects to worry about.
-        this.interactables = [this.huePicker, this.colorSquare];
-
-        this.canvas.addEventListener('mousedown', function(e) {
-            isDragging = true;
-            self.onInteraction(e);
-        }, false);
-
-        this.canvas.addEventListener('mousemove', function(e) {
-            if (isDragging === true) {
-                // Only allow interaction when the mouse is being dragged.
-                self.onInteraction(e);
-            }
-        }, false);
-
-        this.canvas.addEventListener("mouseup", function() {
-            isDragging = false;
-        }, false);
-
-        this.canvas.addEventListener(HuePicker.HUE_PICKED, function(e) {
-            var extra = e.detail;
-            if (extra != null && extra.hsl != null) {
-                // Update colorSquare with new hue.
-                self.colorSquare.draw(extra.hsl[0]);
-            }
-        }, false);
-
-        this.canvas.addEventListener(ColorSquare.SQUARE_PICKED, function(e) {
-            // Simply relay this event under a new event name for outside use.
-            var ev = new CustomEvent(CanvasColorPicker.COLOR_PICKED, {
-                detail: e.detail
-            });
-
-            self.canvas.dispatchEvent(ev);
-        }, false);
     };
 
     CanvasColorPicker.prototype.getColor = function() {
@@ -124,7 +66,80 @@
         };
     };
 
-    CanvasColorPicker.prototype.onInteraction = function(e) {
+    CanvasColorPicker.prototype._initContainer = function() {
+        this.el = document.getElementById(this.config.id);
+
+        if (this.el == null) {
+            this.el = document.createElement("div");
+            document.body.appendChild(this.el);
+        }
+    };
+
+    CanvasColorPicker.prototype._initCanvas = function() {
+        this.canvas = document.createElement("canvas");
+        this.canvas.setAttribute("width", this.config.size);
+        this.canvas.setAttribute("height", this.config.size);
+        this.el.appendChild(this.canvas);
+
+        this.ctx = this.canvas.getContext("2d");
+    };
+
+    CanvasColorPicker.prototype._initHuePicker = function() {
+        this.huePicker = new HuePicker(this.config, this.ctx, 0, 0, 
+                                       this.canvas.width, this.canvas.height);
+    };
+
+    CanvasColorPicker.prototype._initColorSquare = function() {
+        var side = this.canvas.width / 2,
+            pos = this.centerX - side / 2;
+
+        this.colorSquare = new ColorSquare(this.config, this.ctx, pos, pos, side, side);
+    };
+
+    CanvasColorPicker.prototype._attachEventListeners = function() {
+        // With `self`, we don't need to worry about browser support for
+        // Function.prototype.bind.
+        var self = this;
+        var isDragging = false;
+
+        // Only 2 objects to worry about.
+        this.interactables = [this.huePicker, this.colorSquare];
+
+        this.canvas.addEventListener('mousedown', function(e) {
+            isDragging = true;
+            self._onInteraction(e);
+        }, false);
+
+        this.canvas.addEventListener('mousemove', function(e) {
+            if (isDragging === true) {
+                // Only allow interaction when the mouse is being dragged.
+                self._onInteraction(e);
+            }
+        }, false);
+
+        this.canvas.addEventListener("mouseup", function() {
+            isDragging = false;
+        }, false);
+
+        this.canvas.addEventListener(HuePicker.HUE_PICKED, function(e) {
+            var extra = e.detail;
+            if (extra != null && extra.hsl != null) {
+                // Update colorSquare with new hue.
+                self.colorSquare.draw(extra.hsl[0]);
+            }
+        }, false);
+
+        this.canvas.addEventListener(ColorSquare.SQUARE_PICKED, function(e) {
+            // Simply relay this event under a new event name for outside use.
+            var ev = new CustomEvent(CanvasColorPicker.COLOR_PICKED, {
+                detail: e.detail
+            });
+
+            self.canvas.dispatchEvent(ev);
+        }, false);
+    };
+
+    CanvasColorPicker.prototype._onInteraction = function(e) {
         var pos = this.getCanvasPositionForEvent(e),
             x = pos.left,
             y = pos.top;
