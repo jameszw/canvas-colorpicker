@@ -108,12 +108,31 @@
         var self = this;
         var isDragging = false;
 
+        // Keep track of the starting sprite location so that other sprites'
+        // interaction is disabled until dragging is finished.
+        var dragStartSprite = null;
+
         // Only 2 objects to worry about.
         this.interactables = [this.huePicker, this.colorSquare];
 
+        function checkForSprite(x, y) {
+            for (var i = 0; i < self.interactables.length; i++) {
+                var sprite = self.interactables[i];
+
+                if (sprite.containsPoint(x, y)) {
+                    if (isDragging === true && dragStartSprite == null) {
+                        dragStartSprite = sprite;
+                    }
+
+                    return true;
+                }
+            }
+            return false;
+        }
+
         this.canvas.addEventListener('mousedown', function(e) {
             isDragging = true;
-            self._onInteraction(e);
+            self._onInteraction(e, dragStartSprite);
         }, false);
 
         this.canvas.addEventListener('mousemove', function(e) {
@@ -121,19 +140,19 @@
                 x = pos.left,
                 y = pos.top;
 
-            var toggleCursor = (self.huePicker.containsPoint(x, y) || 
-                                self.colorSquare.containsPoint(x, y));
+            var toggleCursor = checkForSprite(x, y);
 
             self._toggleCursor(toggleCursor);
 
             if (isDragging === true) {
                 // Only allow interaction when the mouse is being dragged.
-                self._onInteraction(e);
+                self._onInteraction(e, dragStartSprite);
             }
         }, false);
 
         this.canvas.addEventListener("mouseup", function() {
             isDragging = false;
+            dragStartSprite = null;
         }, false);
 
         this.canvas.addEventListener(HuePicker.HUE_PICKED, function(e) {
@@ -154,13 +173,17 @@
         }, false);
     };
 
-    CanvasColorPicker.prototype._onInteraction = function(e) {
+    CanvasColorPicker.prototype._onInteraction = function(e, aSprite) {
         var pos = this.getCanvasPositionForEvent(e),
             x = pos.left,
             y = pos.top;
 
-        for (var i = 0; i < this.interactables.length; i++) {
-            var sprite = this.interactables[i];
+        // If a sprite is passed in as an argument, we only want to check
+        // for that sprite.
+        var sprites = (aSprite == null) ? this.interactables : [aSprite];
+
+        for (var i = 0; i < sprites.length; i++) {
+            var sprite = sprites[i];
 
             if (sprite.containsPoint(x, y)) {
                 sprite.pickPoint(x, y);
