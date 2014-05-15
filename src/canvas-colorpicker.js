@@ -2,15 +2,14 @@
 (function() {
 
     var defaults = {
-        size: 300
+        size: 300,
+        markerWidth: 10
     };
 
     /*
      * CanvasColorPicker
      */
     function CanvasColorPicker(config) {
-        // TODO: more flexible creation of canvas based on id
-        // TODO set canvas width/height
         this.config = extend(defaults, config);
 
         this.el = document.getElementById(this.config.id);
@@ -26,15 +25,15 @@
 
         this.ctx = this.canvas.getContext("2d");
 
-        Sprite.apply(this, [this.ctx, 0, 0, this.canvas.width, this.canvas.height]);
+        Sprite.apply(this, [this.config, this.ctx, 0, 0, this.canvas.width, this.canvas.height]);
 
-        this.huePicker = new HuePicker(this.ctx, 0, 0, 
+        this.huePicker = new HuePicker(this.config, this.ctx, 0, 0, 
                                        this.canvas.width, this.canvas.height);
 
         var side = this.canvas.width / 2,
             pos = this.centerX - side / 2;
 
-        this.colorSquare = new ColorSquare(this.ctx, pos, pos, side, side);
+        this.colorSquare = new ColorSquare(this.config, this.ctx, pos, pos, side, side);
 
         this.attachEventListeners();
     }
@@ -144,8 +143,10 @@
 
     /*
      * Sprite
+     *   Represents a display object on the canvas.
      */
-    function Sprite(ctx, x, y, w, h) {
+    function Sprite(config, ctx, x, y, w, h) {
+        this.config = config;
         this.ctx = ctx;
 
         // x-, y-coords denote absolute top-left position within the canvas.
@@ -247,7 +248,7 @@
         this.innerR2 = Math.pow(this.innerRadius, 2);
 
         var p = this.innerRadius + (this.outerRadius - this.innerRadius)/2;
-        this.marker = new Marker(this.ctx, this.centerX + p, this.centerY);
+        this.marker = new Marker(this.config, this.ctx, this.centerX + p, this.centerY);
 
         // Overriding of parent class properties has to be done in constructor due 
         // to the way inheritance is handled now (not using prototype).
@@ -335,7 +336,7 @@
 
         this.hue = 0;
 
-        this.marker = new Marker(this.ctx, 
+        this.marker = new Marker(this.config, this.ctx, 
             this.x + this.width / 2, this.y + this.height / 2);
 
         this.updateMarker = HuePicker.prototype.updateMarker;
@@ -352,8 +353,8 @@
             this.pickMarkerColor();
         }
     };
-    ColorSquare.prototype.rgbAtPoint = function(x, y) {
 
+    ColorSquare.prototype.rgbAtPoint = function(x, y) {
         var sat = ((x - this.x) / this.width) * 100;
         var light = 100 - ((y - this.y) / this.height) * 100;
 
@@ -398,15 +399,17 @@
 
     /*
      * Marker
+     *   Display object that selects values.
      */
     function Marker() {
         var args = Array.prototype.slice.call(arguments);
 
-        // TODO: Configurable width, height, lineWidth
-        var side = 10;
+        this.config = arguments[0];
 
-        args[3] = args[3] == null ? side : args[3];
+        var side = this.config.markerWidth;
+
         args[4] = args[4] == null ? side : args[4];
+        args[5] = args[5] == null ? side : args[5];
 
         Sprite.apply(this, args);
 
@@ -446,7 +449,7 @@
     function extend() {
         var obj = {};
         for (var i = 0; i < arguments.length; i++) {
-            // Create new object reference
+            // Create new object references
             var copy = JSON.parse(JSON.stringify(arguments[i]));
 
             for (var key in copy) {
