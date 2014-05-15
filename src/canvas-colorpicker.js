@@ -111,6 +111,15 @@
         }, false);
 
         this.canvas.addEventListener('mousemove', function(e) {
+            var pos = self.getCanvasPositionForEvent(e),
+                x = pos.left,
+                y = pos.top;
+
+            var toggleCursor = (self.huePicker.containsPoint(x, y) || 
+                                self.colorSquare.containsPoint(x, y));
+
+            self._toggleCursor(toggleCursor);
+
             if (isDragging === true) {
                 // Only allow interaction when the mouse is being dragged.
                 self._onInteraction(e);
@@ -149,7 +158,18 @@
 
             if (sprite.containsPoint(x, y)) {
                 sprite.pickPoint(x, y);
+
+                // Sprites aren't overlapping, so there's no need to iterate further.
+                return;
             }
+        }
+    };
+
+    CanvasColorPicker.prototype._toggleCursor = function(on) {
+        if (on === true) {
+            this.canvas.style.cursor = "crosshair";
+        } else {
+            this.canvas.style.cursor = "default";
         }
     };
 
