@@ -85,7 +85,8 @@
         var self = this;
 
         this.input.addEventListener("keyup", function(e) {
-            if (e.keyCode === ENTER) {
+            var keyCode = e.which || e.keyCode;
+            if (keyCode === ENTER) {
                 self.inputToPicker();
             }
         }, false);
