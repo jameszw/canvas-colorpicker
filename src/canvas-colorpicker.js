@@ -1,3 +1,4 @@
+/* @license Open source under the MIT License. */
 (function() {
 
     var defaults = {
