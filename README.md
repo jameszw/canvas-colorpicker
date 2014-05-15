@@ -3,7 +3,7 @@ Canvas Color Picker
 
 A simple JavaScript color picker using `canvas`.
 
-### Usage
+## Usage
 
 Include `canvas-colorpicker.min.js` in your html (this file can be found under the
 `build/` directory):
@@ -21,7 +21,7 @@ of the color picker:
 If an ID isn't supplied, a container element will be automatically created for 
 the color picker.
 
-### Options
+## Options
 
 `id`
 
@@ -32,7 +32,7 @@ The ID of the parent element of the color picker's `canvas` element.
 The width/height dimensions of the color picker's `canvas` element.
 
 
-### Methods
+## Methods
 
 `setRGB(red, green, blue)`
 
@@ -61,7 +61,7 @@ Shorthand for `getColor().rgb`.
 
 Shorthand for `getColor().hsl`.
 
-### Events
+## Events
 
 `CanvasColorPicker.COLOR_PICKED`
 
@@ -83,6 +83,7 @@ Example usage:
     });
 
 
-### License
+## License
 
-Released under [the MIT License](http://opensource.org/licenses/MIT).
+Released under [the MIT License](http://opensource.org/licenses/MIT). See LICENSE
+file for license rights and limitations.
