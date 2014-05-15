@@ -31,6 +31,9 @@ The ID of the parent element of the color picker's `canvas` element.
 
 The width/height dimensions of the color picker's `canvas` element.
 
+`initialHue` (default: `-90`)
+
+The initial hue value (in degrees).
 
 ## Methods
 

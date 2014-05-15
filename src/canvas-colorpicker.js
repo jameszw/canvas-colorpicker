@@ -3,7 +3,8 @@
 
     var defaults = {
         size: 300,
-        markerWidth: 10
+        markerWidth: 10,
+        initialHue: -90
     };
 
     /*
@@ -188,8 +189,8 @@
         this.ctx = ctx;
 
         // x-, y-coords denote absolute top-left position within the canvas.
-        x = (x == null || isNaN(x)) ? 0 : Math.round(x);
-        y = (y == null || isNaN(x)) ? 0 : Math.round(y);
+        x = (x == null || isNaN(x)) ? 0 : x;
+        y = (y == null || isNaN(x)) ? 0 : y;
 
         this.width = w;
         this.height = h;
@@ -285,8 +286,7 @@
         this.outerR2 = Math.pow(this.outerRadius, 2);
         this.innerR2 = Math.pow(this.innerRadius, 2);
 
-        var p = this.innerRadius + (this.outerRadius - this.innerRadius)/2;
-        this.marker = new Marker(this.config, this.ctx, this.centerX + p, this.centerY);
+        this._initMarker();
 
         // Overriding of parent class properties has to be done in constructor due 
         // to the way inheritance is handled now (not using prototype).
@@ -298,6 +298,27 @@
     }
 
     HuePicker.HUE_PICKED = "huePicked";
+
+    HuePicker.prototype._initMarker = function() {
+        // Half-way in between
+        var r = this.innerRadius + (this.outerRadius - this.innerRadius)/2;
+
+        var x = this.centerX, 
+            y = this.centerY;
+
+        var h = this.config.initialHue;
+
+        if (h == null || isNaN(h)) {
+            h = 0;
+        } else {
+            h *= Math.PI / 180;
+        }
+
+        x += r * Math.cos(h);
+        y += r * Math.sin(h);
+
+        this.marker = new Marker(this.config, this.ctx, x, y);
+    };
 
     HuePicker.prototype.draw = function() {
         this.drawArea(this.x, this.y, this.width, this.height);
@@ -372,7 +393,7 @@
     function ColorSquare() {
         Sprite.apply(this, arguments);
 
-        this.hue = 0;
+        this.hue = isNaN(this.config.initialHue) ? 0 : this.config.initialHue % 360;
 
         this.marker = new Marker(this.config, this.ctx, 
             this.x + this.width / 2, this.y + this.height / 2);
