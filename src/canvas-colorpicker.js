@@ -21,7 +21,8 @@
         this._initHuePicker();
         this._initColorSquare();
 
-        this._attachEventListeners();
+        this._attachMouseListeners();
+        this._attachPickerListeners();
     }
 
     CanvasColorPicker.COLOR_PICKED = "colorPicked";
@@ -102,15 +103,15 @@
         this.colorSquare = new ColorSquare(this.config, this.ctx, pos, pos, side, side);
     };
 
-    CanvasColorPicker.prototype._attachEventListeners = function() {
+    CanvasColorPicker.prototype._attachMouseListeners = function() {
         // With `self`, we don't need to worry about browser support for
         // Function.prototype.bind.
         var self = this;
-        var isDragging = false;
 
         // Keep track of the starting sprite location so that other sprites'
         // interaction is disabled until dragging is finished.
         var dragStartSprite = null;
+        var isDragging = false;
 
         // Only 2 objects to worry about.
         this.interactables = [this.huePicker, this.colorSquare];
@@ -154,12 +155,16 @@
             isDragging = false;
             dragStartSprite = null;
         }, false);
+    };
+
+    CanvasColorPicker.prototype._attachPickerListeners = function() {
+        var self = this;
 
         this.canvas.addEventListener(HuePicker.HUE_PICKED, function(e) {
-            var extra = e.detail;
-            if (extra != null && extra.hsl != null) {
+            var detail = e.detail;
+            if (detail != null && detail.hsl != null) {
                 // Update colorSquare with new hue.
-                self.colorSquare.draw(extra.hsl[0]);
+                self.colorSquare.draw(detail.hsl[0]);
             }
         }, false);
 
